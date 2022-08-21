@@ -2,7 +2,7 @@
 
 namespace Parser\Models;
 
-class View
+class Request
 {
     private string $method;
     private string $url;

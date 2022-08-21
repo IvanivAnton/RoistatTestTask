@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class ViewTest extends TestCase
+class RequestTest extends TestCase
 {
     public function testViewModel()
     {
@@ -12,7 +12,7 @@ class ViewTest extends TestCase
         $bites = 21233;
         $userAgent = "User agent hello";
 
-        $view = new Parser\Models\View($method, $url, $statusCode, $bites, $userAgent);
+        $view = new Parser\Models\Request($method, $url, $statusCode, $bites, $userAgent);
         $this->assertEquals($method, $view->method());
         $this->assertEquals($url, $view->url());
         $this->assertEquals($statusCode, $view->statusCode());

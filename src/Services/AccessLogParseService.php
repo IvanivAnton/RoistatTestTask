@@ -2,15 +2,15 @@
 
 namespace Parser\Services;
 
-use Parser\Models\View;
+use Parser\Models\Request;
 
 class AccessLogParseService
 {
     /**
      * @param string $accessLogLine
-     * @return View|null
+     * @return Request|null
      */
-    public function parseLogLine(string $accessLogLine): ?View
+    public function parseLogLine(string $accessLogLine): ?Request
     {
         if (empty($accessLogLine)) {
             return null;
@@ -28,6 +28,6 @@ class AccessLogParseService
         $bites = $logMatches[4];
         $userAgent =  $logMatches[5];
 
-        return new View($method, $url, $statusCode, $bites, $userAgent);
+        return new Request($method, $url, $statusCode, $bites, $userAgent);
     }
 }

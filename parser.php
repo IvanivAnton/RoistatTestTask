@@ -35,52 +35,47 @@ $crawlersKeywords = ['google', 'bing', 'baidu', 'yandex'];
 $uniqueUserAgents = [];
 
 foreach ($reader->lines() as $line) {
-    $lineTrimmed = trim($line);
-    if (empty($lineTrimmed)) {
+    $trimmedLine = trim($line);
+    if (empty($trimmedLine)) {
         continue;
     }
 
     ++$result['lines'];
 
-    $view = $parserService->parseLogLine($lineTrimmed);
-    if (empty($view))
+    $request = $parserService->parseLogLine($trimmedLine);
+    if (empty($request))
         continue;
 
     $result['views'] += 1;
 
-    if ($arrayService->inArray($view->method(), $methodsToCalcTraffic, true)) {
-        $result['traffic'] += $view->bites();
+    if ($arrayService->inArray($request->method(), $methodsToCalcTraffic, true)) {
+        $result['traffic'] += $request->bites();
     }
 
-    $viewUrlHashed = hash('md5', $view->url());
-    if (!$arrayService->inArray($viewUrlHashed, $uniqueUrlsHashed, true)) {
+    $requestUrlHashed = hash('md5', $request->url());
+    if (!$arrayService->inArray($requestUrlHashed, $uniqueUrlsHashed, true)) {
         $result['urls'] += 1;
-        $uniqueUrlsHashed[] = $viewUrlHashed;
+        $uniqueUrlsHashed[] = $requestUrlHashed;
     }
 
-    $viewStatusCode = $view->statusCode();
-    if (!$arrayService->arrayKeyExists($viewStatusCode, $result['statusCodes'])) {
-        $result['statusCodes'][$viewStatusCode] = 1;
+    $requestStatusCode = $request->statusCode();
+    if (!$arrayService->arrayKeyExists($requestStatusCode, $result['statusCodes'])) {
+        $result['statusCodes'][$requestStatusCode] = 1;
     } else {
-        $result['statusCodes'][$viewStatusCode] += 1;
+        $result['statusCodes'][$requestStatusCode] += 1;
     }
 
-    $viewUserAgent = $stringService->strToLower($view->userAgent());
+    $requestUserAgent = $stringService->strToLower($request->userAgent());
     foreach ($crawlersKeywords as $keyword) {
-        if ($stringService->strPos($viewUserAgent, $keyword) !== false) {
+        if ($stringService->strPos($requestUserAgent, $keyword) !== false) {
             $result['crawlers'][$keyword] += 1;
             break;
         }
     }
 
-    if (!$arrayService->inArray($viewUserAgent, $uniqueUserAgents, true)) {
-        $uniqueUserAgents[] = $viewUserAgent;
+    if (!$arrayService->inArray($requestUserAgent, $uniqueUserAgents, true)) {
+        $uniqueUserAgents[] = $requestUserAgent;
     }
-}
-
-foreach ($crawlersKeywords as $keyword) {
-    $result['crawlers'][$stringService->uppercaseFirst($keyword)] = $result['crawlers'][$keyword];
-    unset($result['crawlers'][$keyword]);
 }
 
 echo $arrayService->jsonEncode($result) . PHP_EOL;
