@@ -2,8 +2,11 @@
 
 Реализация тестового задания по парсингу Access log сайта
 
-## Install
+## Install dev
 `composer install`
+
+## Install prod
+`composer install --no-dev`
 
 ## Usage
 `php parser.php /path/to/access.log`
