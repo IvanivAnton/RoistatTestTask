@@ -2,14 +2,16 @@
 
 Реализация тестового задания по парсингу Access log сайта
 
-## Install dev
+## Development install 
 `composer install`
 
-## Install prod
+## Production install 
 `composer install --no-dev`
 
 ## Usage
 `php parser.php /path/to/access.log`
 
 ## Tests
+Works only at <span style="color: yellow">Development install</span>
+<br>
 `./vendor/bin/phpunit tests`
